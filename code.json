@@ -1,25 +1,11 @@
 {
   "codes": [
     {
-      "code": "WELCOME25",
-      "bonus": 2000,
-      "maxUses": 1,
-      "description": "Bonus benvenuto",
+      "code": "ENRIBOCCO",
+      "bonus": 10000,
+      "maxUses": 1000000000000000,
+      "description": "Regalo dal fondatore",
       "isActive": true
-    },
-    {
-      "code": "WEEKEND50",
-      "bonus": 50,
-      "maxUses": 20,
-      "description": "Promo weekend",
-      "isActive": false
-    },
-    {
-      "code": "VIP100",
-      "bonus": 100,
-      "maxUses": 5,
-      "description": "Promo VIP",
-      "isActive": false
     }
   ]
 }
