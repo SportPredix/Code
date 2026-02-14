@@ -13,6 +13,13 @@
       "maxUses": 5,
       "description": "Regalo dal fondatore",
       "isActive": true
+    },
+    {
+      "code": "67",
+      "bonus": 67,
+      "maxUses": 67,
+      "description": "Regalo dal fondatore",
+      "isActive": true
     }
   ]
 }
