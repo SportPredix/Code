@@ -20,6 +20,13 @@
       "maxUses": 67,
       "description": "Regalo dal fondatore",
       "isActive": true
+    },
+    {
+      "code": "SIGMA",
+      "bonus": 67,
+      "maxUses": 1,
+      "description": "Regalo dal fondatore",
+      "isActive": false
     }
   ]
 }

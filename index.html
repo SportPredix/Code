@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Codici Bonus</title>
+  <style>
+    :root {
+      --bg: #020505;
+      --panel: #071110;
+      --line: #37f3d7;
+      --text: #e8fffb;
+      --muted: #8fbab3;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Consolas, "Courier New", monospace;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top right, rgba(55, 243, 215, 0.12), transparent 38%),
+        linear-gradient(180deg, #000, #03100f 70%, #000);
+      display: grid;
+      place-items: center;
+      padding: 24px;
+    }
+
+    .panel {
+      width: min(980px, 100%);
+      background: linear-gradient(180deg, rgba(55, 243, 215, 0.05), rgba(0, 0, 0, 0.55));
+      border: 1px solid var(--line);
+      box-shadow: 0 0 24px rgba(55, 243, 215, 0.24), inset 0 0 32px rgba(0, 0, 0, 0.65);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .panel::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: repeating-linear-gradient(
+        180deg,
+        rgba(55, 243, 215, 0.045) 0,
+        rgba(55, 243, 215, 0.045) 1px,
+        transparent 1px,
+        transparent 7px
+      );
+    }
+
+    header {
+      padding: 18px 20px;
+      border-bottom: 1px solid var(--line);
+      position: relative;
+      z-index: 1;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(1.25rem, 2vw, 1.8rem);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      text-shadow: 0 0 10px rgba(55, 243, 215, 0.5);
+    }
+
+    p {
+      margin: 8px 0 0;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      border-bottom: 1px solid rgba(55, 243, 215, 0.5);
+      padding: 12px 14px;
+      text-align: left;
+      white-space: nowrap;
+    }
+
+    th {
+      color: var(--line);
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      font-size: 0.8rem;
+      background: rgba(0, 0, 0, 0.32);
+    }
+
+    tbody tr:hover {
+      background: rgba(55, 243, 215, 0.08);
+    }
+
+    .status {
+      display: inline-block;
+      border: 1px solid var(--line);
+      color: var(--line);
+      padding: 3px 8px;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+    }
+
+    .status-off {
+      border-color: #6f7e7b;
+      color: #9aa8a5;
+    }
+
+    footer {
+      padding: 10px 14px 16px;
+      color: var(--muted);
+      font-size: 0.8rem;
+      position: relative;
+      z-index: 1;
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .foot-info {
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+  <main class="panel">
+    <header>
+      <h1>Codici Promo</h1>
+      <p>Tema nero con linee verde acqua</p>
+    </header>
+
+    <div class="table-wrap">
+      <table aria-label="Lista codici promo">
+        <thead>
+          <tr>
+            <th>Codice</th>
+            <th>Bonus</th>
+            <th>Utilizzi Max</th>
+            <th>Descrizione</th>
+            <th>Stato</th>
+          </tr>
+        </thead>
+        <tbody id="codesBody"></tbody>
+      </table>
+    </div>
+
+    <footer>
+      <span class="foot-info" id="footerText">Caricamento dati...</span>
+      <span class="foot-info" id="refreshIndicator">Inizializzazione...</span>
+    </footer>
+  </main>
+
+  <script>
+    const codesBody = document.getElementById("codesBody");
+    const footerText = document.getElementById("footerText");
+    const refreshIndicator = document.getElementById("refreshIndicator");
+    let lastSnapshot = "";
+
+    function addCell(row, value) {
+      const cell = document.createElement("td");
+      cell.textContent = value ?? "-";
+      row.appendChild(cell);
+    }
+
+    function formatValue(value) {
+      if (typeof value === "number") {
+        return value.toLocaleString("it-IT");
+      }
+      return value ?? "-";
+    }
+
+    function renderEmpty(message) {
+      codesBody.textContent = "";
+      const row = document.createElement("tr");
+      const cell = document.createElement("td");
+      cell.colSpan = 5;
+      cell.textContent = message;
+      row.appendChild(cell);
+      codesBody.appendChild(row);
+    }
+
+    function renderCodes(codes) {
+      codesBody.textContent = "";
+
+      if (!Array.isArray(codes) || codes.length === 0) {
+        renderEmpty("Nessun codice disponibile");
+        return;
+      }
+
+      for (const item of codes) {
+        const row = document.createElement("tr");
+        addCell(row, item.code);
+        addCell(row, formatValue(item.bonus));
+        addCell(row, formatValue(item.maxUses));
+        addCell(row, item.description);
+
+        const statusCell = document.createElement("td");
+        const badge = document.createElement("span");
+        const isActive = Boolean(item.isActive);
+        badge.className = isActive ? "status" : "status status-off";
+        badge.textContent = isActive ? "Attivo" : "Disattivo";
+        statusCell.appendChild(badge);
+        row.appendChild(statusCell);
+
+        codesBody.appendChild(row);
+      }
+    }
+
+    async function loadCodes() {
+      try {
+        const response = await fetch("code.json?v=" + Date.now(), { cache: "no-store" });
+        if (!response.ok) {
+          throw new Error("HTTP " + response.status);
+        }
+
+        const data = await response.json();
+        const snapshot = JSON.stringify(data);
+
+        if (snapshot !== lastSnapshot) {
+          renderCodes(data.codes);
+          lastSnapshot = snapshot;
+          footerText.textContent = "Dati caricati da code.json";
+          refreshIndicator.textContent = "Aggiornato: " + new Date().toLocaleTimeString("it-IT");
+        } else {
+          refreshIndicator.textContent = "In ascolto: " + new Date().toLocaleTimeString("it-IT");
+        }
+      } catch (error) {
+        if (!lastSnapshot) {
+          renderEmpty("Impossibile leggere code.json");
+        }
+        footerText.textContent = "Errore nel caricamento";
+        refreshIndicator.textContent = "Controlla server locale e percorso file";
+        console.error(error);
+      }
+    }
+
+    loadCodes();
+    setInterval(loadCodes, 3000);
+  </script>
+</body>
+</html>
