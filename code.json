@@ -1,43 +1,8 @@
 {
   "codes": [
     {
-      "code": "ENRIBOCCO",
-      "bonus": 10000,
-      "maxUses": 1000000000000000,
-      "description": "Regalo dal fondatore",
-      "isActive": true
-    },
-    {
-      "code": "AURA",
-      "bonus": 10000,
-      "maxUses": 5,
-      "description": "Regalo dal fondatore",
-      "isActive": true
-    },
-    {
-      "code": "67",
-      "bonus": 67,
-      "maxUses": 67,
-      "description": "Regalo dal fondatore",
-      "isActive": true
-    },
-    {
-      "code": "SIGMA",
-      "bonus": 100,
-      "maxUses": 1,
-      "description": "Regalo dal fondatore",
-      "isActive": false
-    },
-    {
-      "code": "CRANCI",
-      "bonus": 10469,
-      "maxUses": 1,
-      "description": "Regalo dal fondatore",
-      "isActive": true
-    },
-    {
-      "code": "TOLONE",
-      "bonus": 100,
+      "code": "WELCOME2026",
+      "bonus": 1000,
       "maxUses": 1,
       "description": "Regalo dal fondatore",
       "isActive": true
