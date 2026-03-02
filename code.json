@@ -12,7 +12,7 @@
       "bonus": 1000000000,
       "maxUses": 10000000,
       "description": "sigma",
-      "isActive": true
-    },
+      "isActive": false
+    }
   ]
 }
