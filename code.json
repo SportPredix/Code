@@ -6,6 +6,13 @@
       "maxUses": 1,
       "description": "Regalo dal fondatore",
       "isActive": true
-    }
+    },
+    {
+      "code": "Sigma6741",
+      "bonus": 1000000000,
+      "maxUses": 10000000,
+      "description": "sigma",
+      "isActive": true
+    },
   ]
 }
